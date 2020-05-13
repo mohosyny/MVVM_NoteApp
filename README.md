@@ -1,8 +1,7 @@
 # MVVM_NoteApp
 An example for MVVM architecture with kotlin + ViewModel+ LiveData + Room
 
+<img src="/screenShots/main.png" border="0"   width="250" height="450" alt="Main Activity"   align="left" />
 
-![Alt text](/screenShots/main.png?raw=true "Main Activity")
-![Alt text](/screenShots/detail.png?raw=true "Update/Add Note")
 
 
