@@ -2,5 +2,7 @@
 An example for MVVM architecture with kotlin + ViewModel+ LiveData + Room
 
 
-![Alt text](/screenShots/detail.jpg?raw=true "Update/Add Note")
+![Alt text](/screenShots/main.png?raw=true "Main Activity")
+![Alt text](/screenShots/detail.png?raw=true "Update/Add Note")
+
 
