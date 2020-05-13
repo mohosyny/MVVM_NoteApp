@@ -5,4 +5,4 @@ package neo.mohosyny.mynote
  const val EXTRA_ID = "id"
  const val EXTRA_TITLE = "title"
  const val EXTRA_DESC = "description"
- const val EXTRA_PRIORITY = "periority"
+ const val EXTRA_PRIORITY = "priority"

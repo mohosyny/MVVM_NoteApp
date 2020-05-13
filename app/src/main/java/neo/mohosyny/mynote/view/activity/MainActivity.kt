@@ -1,11 +1,9 @@
 package neo.mohosyny.mynote.view.activity
 
 import android.app.Activity
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -36,28 +34,16 @@ class MainActivity : AppCompatActivity() {
         noteViewModel.getAllNotes()?.observe(this, Observer { list ->
             noteAdapter.submitList(list)
         })
-        noteAdapter = AdapterMain { position ->
-            note = noteAdapter.getNoteAt(position)
-            ID = note.id
-            val intent = Intent(this, DetailActivity::class.java)
-            intent.putExtra(EXTRA_TITLE, note.title)
-            intent.putExtra(EXTRA_ID, note.id)
-            intent.putExtra(EXTRA_DESC, note.description)
-            intent.putExtra(EXTRA_PRIORITY, note.priority)
-
-            startActivityForResult(intent, EDIT_REQUEST)
-        }
-        setupRecycler()
-        deleteNote()
         fab_main.setOnClickListener {
             intent = Intent(this, DetailActivity::class.java)
             startActivityForResult(intent, ADD_REQUEST)
         }
 
+        setupRecycler()
+        deleteNote()
     }
 
     private fun deleteNote() {
-
         val itemTouchHelperCallback =
             object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
                 override fun onMove(
@@ -74,16 +60,23 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(rcvMain)
 
     }
 
-
     private fun setupRecycler() {
+        noteAdapter = AdapterMain { position ->
+            note = noteAdapter.getNoteAt(position)
+            ID = note.id
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra(EXTRA_TITLE, note.title)
+            intent.putExtra(EXTRA_ID, note.id)
+            intent.putExtra(EXTRA_DESC, note.description)
+            intent.putExtra(EXTRA_PRIORITY, note.priority)
 
-
+            startActivityForResult(intent, EDIT_REQUEST)
+        }
         rcvMain = rcv_main
         rcvMain.layoutManager = LinearLayoutManager(this)
         rcvMain.setHasFixedSize(true)
@@ -94,15 +87,11 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (data != null) {
-            val title = data.getStringExtra(EXTRA_TITLE)
-            val description = data.getStringExtra(EXTRA_DESC)
+            val title = data.getStringExtra(EXTRA_TITLE)!!
+            val description = data.getStringExtra(EXTRA_DESC)!!
             val priority = data.getIntExtra(EXTRA_PRIORITY, 1)
 
-            val note = Note(
-                title = title,
-                description = description,
-                priority = priority
-            )
+            val note = Note(title = title, description = description, priority = priority)
             if (resultCode == Activity.RESULT_OK && requestCode == ADD_REQUEST) {
                 noteViewModel.insert(note)
 
@@ -114,22 +103,14 @@ class MainActivity : AppCompatActivity() {
                         .show()
                     return
                 } else {
-                    Log.e("TAG", "UPDATED")
-                    Log.e("TAG", "title = $title")
-                    Log.e("TAG", "desc = $description")
-                    Log.e("TAG", "per = $priority")
-                    Log.e("TAG", "id = $ID")
                     note.id = ID
                     noteViewModel.update(note)
                     Toast.makeText(this, "Note  Updated :)", Toast.LENGTH_SHORT)
                         .show()
                 }
             }
-            // noteAdapter.notifyDataSetChanged()
-
         }
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuInflater: MenuInflater = menuInflater
